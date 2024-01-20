@@ -113,10 +113,16 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
+// Function to evaluate the expression based on the given operands and operation
 function evaluate({ currentOperand, previousOperand, operation }) {
+  // Convert operands to floating-point numbers
   const prev = parseFloat(previousOperand);
   const current = parseFloat(currentOperand);
+
+  // Check if either operand is NaN, return an empty string if true
   if (isNaN(prev) || isNaN(current)) return "";
+
+  // Perform computation based on the specified operation
   let computation = "";
   switch (operation) {
     case "+":
@@ -132,20 +138,29 @@ function evaluate({ currentOperand, previousOperand, operation }) {
       computation = prev / current;
       break;
   }
+
+  // Convert the result to a string and return
   return computation.toString();
 }
 
+// Number formatter to format integers (maximumFractionDigits set to 0)
 const INTEGER_FORMATTER = new Intl.NumberFormat("en-us", {
   maximumFractionDigits: 0,
-})
+});
 
+// Function to format the operand for display
 function formatOperand(operand) {
-  if(operand == null) return
+  // If the operand is null, return early
+  if (operand == null) return;
 
-  const [integer, decimal] = operand.split('.')
+  // Split the operand into integer and decimal parts
+  const [integer, decimal] = operand.split('.');
 
-  if(decimal == null) return INTEGER_FORMATTER.format(integer)
-  return `${INTEGER_FORMATTER.format(integer)}.${decimal}`
+  // If there is no decimal part, format the integer using the INTEGER_FORMATTER
+  if (decimal == null) return INTEGER_FORMATTER.format(integer);
+
+  // If there is a decimal part, format both integer and decimal parts
+  return `${INTEGER_FORMATTER.format(integer)}.${decimal}`;
 }
 
 function App() {
